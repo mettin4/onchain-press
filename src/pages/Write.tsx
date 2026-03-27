@@ -51,7 +51,6 @@ export default function Write() {
   const [coverHover, setCoverHover] = useState(false)
   const [draftSaved, setDraftSaved] = useState(false)
 
-  // Only show address when truly connected
   const shortAddr = connected && account?.address
     ? `${account.address.toString().slice(0, 6)}...${account.address.toString().slice(-4)}`
     : null
@@ -106,15 +105,18 @@ export default function Write() {
 
       setStatus('Encoding article for Shelby...')
       const provider = await createDefaultErasureCodingProvider()
-      const commitments = await generateCommitments(provider, Buffer.from(fileData))
+      const commitments = await generateCommitments(provider, fileData)
 
       setStatus('Registering on Aptos blockchain...')
-      const expirationMicros = BigInt(Date.now() + 1000 * 60 * 60 * 24 * 365) * BigInt(1000)
+      const expirationMicros = (Date.now() + 1000 * 60 * 60 * 24 * 365) * 1000
       const payload = ShelbyBlobClient.createRegisterBlobPayload({
-        account: account.address, blobName,
+        account: account.address,
+        blobName,
         blobMerkleRoot: commitments.blob_merkle_root,
         numChunksets: expectedTotalChunksets(commitments.raw_data_size),
-        expirationMicros, blobSize: commitments.raw_data_size,
+        expirationMicros,
+        blobSize: commitments.raw_data_size,
+        encoding: 0,
       })
 
       const tx = await signAndSubmitTransaction({ data: payload })
@@ -126,9 +128,9 @@ export default function Write() {
       localStorage.removeItem(DRAFT_KEY)
       setStatus(`Published! Blob: ${blobName}`)
       setPublishing(false)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err)
-      setError(err?.message || 'Something went wrong.')
+      setError(err instanceof Error ? err.message : 'Something went wrong.')
       setStatus('')
       setPublishing(false)
     }
@@ -147,7 +149,6 @@ export default function Write() {
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          {/* Wallet button — always visible in write page */}
           <button
             onClick={handleWallet}
             style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: MUTED, background: BG2, padding: '6px 14px', borderRadius: 100, border: BORDER, cursor: 'pointer' }}
@@ -157,9 +158,7 @@ export default function Write() {
                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: GREEN, display: 'inline-block' }} />
                 {shortAddr}
               </>
-            ) : (
-              'Connect Wallet'
-            )}
+            ) : 'Connect Wallet'}
           </button>
           <button
             onClick={saveDraft}
