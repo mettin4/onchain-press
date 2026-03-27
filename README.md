@@ -1,73 +1,73 @@
-# React + TypeScript + Vite
+# OnChain Press
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**A decentralized media publishing platform built on Shelby Protocol and Aptos.**
 
-Currently, two official plugins are available:
+Live demo: [onchain-press.vercel.app](https://onchain-press.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## What is it?
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Censorship is accelerating. Governments block websites, platforms delete accounts, journalists get silenced. Every piece of content published on a centralized platform is one takedown request away from disappearing forever.
 
-## Expanding the ESLint configuration
+OnChain Press removes that vulnerability. Writers, journalists, and creators connect their Petra wallet and publish content — articles, images, videos, audio — directly to Shelby's decentralized blob storage network, registered on Aptos. No platform owns it. No one can delete it. Your wallet address is your byline.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## How it works
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. **Connect wallet** — Link your Petra wallet. Your address becomes your permanent author identity on-chain.
+2. **Write** — Use the editor to compose your article with title, subtitle, tags, and cover image.
+3. **Publish to chain** — Your content is encoded using Clay erasure coding and registered on Aptos via Shelby blob storage.
+4. **It's permanent** — The content lives on the network. No one — including us — can remove it.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Tech Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **Frontend:** React + Vite + TypeScript
+- **Storage:** [Shelby Protocol](https://shelby.xyz) — decentralized hot blob storage
+- **Blockchain:** Aptos (Testnet)
+- **Wallet:** Petra Wallet via `@aptos-labs/wallet-adapter-react`
+- **SDK:** `@shelby-protocol/sdk`
+
+## Features
+
+- 📝 Rich text editor with cover image upload
+- 🔐 Wallet-based author identity (Petra)
+- 💾 Draft auto-save to localStorage
+- 🌐 On-chain blob registration via Shelby SDK
+- 📰 Article feed with tag filtering
+- 👤 Writer directory with follower sorting
+- 🏷️ Topic browser
+
+## Status
+
+Currently awaiting **Early Access** to Shelby's developer program. The UI is fully built and live. Once Early Access is granted, the roadmap includes:
+
+- Real blob registration on Shelby testnet
+- Live content feed pulling from on-chain data
+- Full multi-media support (video and audio streaming via Shelby hot storage)
+- Token-gated content access
+- Creator monetization via Shelby's usage-based pricing
+
+## Run locally
+
+```bash
+git clone https://github.com/mettin4/onchain-press
+cd onchain-press
+npm install --legacy-peer-deps
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Create a `.env` file:
 ```
+VITE_SHELBY_API_KEY=your_api_key
+```
+
+```bash
+npm run dev
+```
+
+## Built by
+
+[@0xmeto_](https://x.com/0xmeto_) — independent builder in the Shelby + Aptos ecosystem.
+
+---
+
+*OnChain Press is built on Shelby Protocol — Web3's first cloud-grade decentralized hot storage network, developed by Aptos Labs and Jump Crypto.*
